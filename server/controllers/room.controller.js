@@ -27,7 +27,7 @@ const roomById = async (req, res, next, id) => {
 };
 
 const read = (req, res) => {
-  return res.json([...new Set(req.room.users)]);
+  return res.json({ ...req.room, users: [...new Set(req.room.users)] });
 };
 
 module.exports = {

@@ -4,7 +4,6 @@ const openSocket = (roomId, token) => {
   const socket = io("http://localhost:3000", {
     query: {
       roomId,
-
       token,
     },
   });
@@ -79,7 +78,6 @@ const listRooms = async (signal, token) => {
 
 const getRoom = async (signal, roomId, token) => {
   try {
-    // console.log(123);
     const response = await fetch(`/api/rooms/${roomId}`, {
       method: "GET",
       headers: {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useRouteMatch, useLocation, useHistory } from "react-router-dom";
+import { Link, useRouteMatch, useHistory } from "react-router-dom";
 
 import { Button } from "@material-ui/core";
 
@@ -10,10 +10,11 @@ import { openSocket, getRoom } from "./api-room";
 
 import { isAuthenticated } from "../auth/auth-helper";
 const Room = () => {
-  const { params } = useRouteMatch("/:roomId");
-  const history = useHistory();
-
   const { token } = isAuthenticated();
+
+  const { params } = useRouteMatch("/:roomId");
+
+  const history = useHistory();
 
   const [users, setUsers] = useState([]);
   const [
@@ -30,12 +31,12 @@ const Room = () => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    getRoom(signal, params.roomId, token).then((users) => {
+    getRoom(signal, params.roomId, token).then((room) => {
       if (users.error) {
         return history.push("/");
       }
 
-      setUsers(users);
+      setUsers(room.users);
 
       subcribeToJoin(({ user }) => {
         setUsers((users) => [...users, user]);

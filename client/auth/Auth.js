@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { useHistory, Redirect } from "react-router-dom";
+import { useHistory, Redirect, useLocation } from "react-router-dom";
 
 import { InputBase } from "@material-ui/core";
 
@@ -8,10 +8,11 @@ import { signin } from "./../auth/api-auth";
 
 import { isAuthenticated, authenticate } from "./../auth/auth-helper";
 
-export default function Auth({ match, location }) {
+export default function Auth() {
   const [userName, setName] = useState("");
-
   const [redirect, setRedirect] = useState(!!isAuthenticated());
+
+  const location = useLocation();
 
   const handleChange = (event) => {
     setName(event.target.value);
