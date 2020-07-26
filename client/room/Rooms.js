@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-import { Button, InputBase, Paper, Card } from "@material-ui/core";
+import { Button, InputBase, Paper, Typography } from "@material-ui/core";
 
 import { createRoom, listRooms } from "./api-room";
 
-const Rooms = ({ location }) => {
+import { isAuthenticated } from "../auth/auth-helper";
+
+const Rooms = () => {
   const [roomName, setRoomName] = useState("");
   const [rooms, setRooms] = useState([]);
+
+  const { token } = isAuthenticated();
 
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
-    listRooms(signal).then((rooms) => {
+    listRooms(signal, token).then((rooms) => {
       setRooms(rooms);
     });
 
@@ -27,7 +31,7 @@ const Rooms = ({ location }) => {
   };
 
   const addRoom = () => {
-    createRoom(roomName).then((data) => {
+    createRoom(roomName, token).then((data) => {
       setRooms([...rooms, data]);
       setRoomName("");
     });
@@ -36,17 +40,20 @@ const Rooms = ({ location }) => {
   return (
     <Paper component="form">
       {rooms.map((room, i) => (
-        <Card key={i}>
+        <div key={i}>
           <Link
             to={{
-              pathname: `/room/${room._id}`,
-              userName: location.state.userName,
+              pathname: `/${room._id}`,
             }}
           >
-            {room.name}
+            <Button>
+              <Typography>{room.name}</Typography>
+            </Button>
           </Link>
-        </Card>
+          <br />
+        </div>
       ))}
+
       <InputBase
         onChange={handleChange}
         value={roomName}

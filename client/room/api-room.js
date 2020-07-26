@@ -1,11 +1,11 @@
 import io from "socket.io-client";
 
-const openSocket = (roomId, userName) => {
-  console.log(roomId);
+const openSocket = (roomId, token) => {
   const socket = io("http://localhost:3000", {
     query: {
       roomId,
-      userName,
+
+      token,
     },
   });
 
@@ -19,20 +19,38 @@ const openSocket = (roomId, userName) => {
     });
   };
 
+  const subcribeToJoin = (cb) => {
+    socket.addEventListener("joinRoom", (user) => {
+      cb(user);
+    });
+  };
+
+  const subcribeToLeave = (cb) => {
+    socket.addEventListener("leaveRoom", (user) => {
+      cb(user);
+    });
+  };
+
   const socketClose = () => {
     socket.close();
   };
 
-  return { sendMessage, subcribeToMessage, socketClose };
+  return {
+    sendMessage,
+    subcribeToMessage,
+    socketClose,
+    subcribeToJoin,
+    subcribeToLeave,
+  };
 };
 
-const createRoom = async (name) => {
+const createRoom = async (name, token) => {
   try {
     const response = await fetch("/api/rooms/", {
       method: "POST",
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ name }),
     });
@@ -42,10 +60,15 @@ const createRoom = async (name) => {
   }
 };
 
-const listRooms = async (signal) => {
+const listRooms = async (signal, token) => {
   try {
     const response = await fetch("/api/rooms/", {
       method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       signal,
     });
     return await response.json();
@@ -54,4 +77,22 @@ const listRooms = async (signal) => {
   }
 };
 
-export { createRoom, listRooms, openSocket };
+const getRoom = async (signal, roomId, token) => {
+  try {
+    // console.log(123);
+    const response = await fetch(`/api/rooms/${roomId}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      signal,
+    });
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export { createRoom, listRooms, getRoom, openSocket };

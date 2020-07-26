@@ -5,24 +5,29 @@ const list = async (req, res) => {
   res.json(rooms);
 };
 const create = async (req, res) => {
-  console.log(req.body);
   const room = new Room(req.body);
   const result = await room.save();
   res.json(result);
 };
 
 const roomById = async (req, res, next, id) => {
-  const room = await Room.findById(id);
-  if (!room)
-    return res.status("400").json({
+  try {
+    const room = await Room.findById(id).populate("users", "_id name");
+    if (!room)
+      return res.status("400").json({
+        error: "Room  not found",
+      });
+    req.room = room;
+    next();
+  } catch (error) {
+    res.status("400").json({
       error: "Room  not found",
     });
-  req.room = room;
-  next();
+  }
 };
 
 const read = (req, res) => {
-  return res.json(req.room);
+  return res.json([...new Set(req.room.users)]);
 };
 
 module.exports = {

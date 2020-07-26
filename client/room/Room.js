@@ -1,17 +1,57 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useRouteMatch, useLocation, useHistory } from "react-router-dom";
 
 import { Button } from "@material-ui/core";
 
 import Chat from "../chat/Chat";
 import MemberList from "./MemberList";
 
-import { openSocket } from "./api-room";
+import { openSocket, getRoom } from "./api-room";
 
-const Room = ({ match, location }) => {
-  const [{ socketClose, sendMessage, subcribeToMessage }] = useState(() =>
-    openSocket(match.params.roomId, location.userName)
-  );
+import { isAuthenticated } from "../auth/auth-helper";
+const Room = () => {
+  const { params } = useRouteMatch("/:roomId");
+  const history = useHistory();
+
+  const { token } = isAuthenticated();
+
+  const [users, setUsers] = useState([]);
+  const [
+    {
+      socketClose,
+      sendMessage,
+      subcribeToMessage,
+      subcribeToJoin,
+      subcribeToLeave,
+    },
+  ] = useState(() => openSocket(params.roomId, token));
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    getRoom(signal, params.roomId, token).then((users) => {
+      if (users.error) {
+        return history.push("/");
+      }
+
+      setUsers(users);
+
+      subcribeToJoin(({ user }) => {
+        setUsers((users) => [...users, user]);
+      });
+
+      subcribeToLeave(({ user }) => {
+        setUsers((prevUsers) =>
+          prevUsers.filter((_user) => _user._id != user._id)
+        );
+      });
+    });
+
+    return function cleanup() {
+      abortController.abort();
+    };
+  }, []);
 
   const leaveRoom = () => {
     socketClose();
@@ -19,22 +59,22 @@ const Room = ({ match, location }) => {
 
   return (
     <div>
-      <MemberList />
-
       <Link
         to={{
-          pathname: "/rooms",
-          state: {
-            userName: location.userName,
-          },
+          pathname: "/",
         }}
       >
         <Button onClick={leaveRoom}>Leave room </Button>
       </Link>
+      <MemberList users={users} />
 
       <Chat
-        roomId={match.params.roomId}
-        actions={{ sendMessage, subcribeToMessage }}
+        actions={{
+          sendMessage,
+          subcribeToMessage,
+          subcribeToJoin,
+          subcribeToLeave,
+        }}
       />
     </div>
   );

@@ -1,17 +1,18 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import Home from "./core/Home";
-import Menu from "./core/Menu";
+
+import Auth from "./auth/Auth";
 import Room from "./room/Room";
 import Rooms from "./room/Rooms";
+import PrivateRoute from "./auth/PrivateRoute";
 
 const MainRouter = () => {
   return (
     <div>
       <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/rooms" component={Rooms} />
-        <Route path="/room/:roomId" component={Room} />
+        <Route path="/auth" component={Auth} />
+        <PrivateRoute path="/:roomId" component={Room} />
+        <PrivateRoute path="/" component={Rooms} />
       </Switch>
     </div>
   );

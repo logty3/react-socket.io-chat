@@ -37,6 +37,14 @@ export default function Chat({ actions }) {
     actions.subcribeToMessage((message) =>
       setMessages((messages) => [...messages, message])
     );
+
+    actions.subcribeToJoin((message) =>
+      setMessages((messages) => [...messages, message])
+    );
+
+    actions.subcribeToLeave((message) =>
+      setMessages((messages) => [...messages, message])
+    );
   }, []);
 
   return (

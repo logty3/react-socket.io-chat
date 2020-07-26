@@ -11,6 +11,8 @@ const devBundle = require("./devBundle");
 const template = require("../template");
 
 const roomRoutes = require("./routes/room.routes");
+const authRoutes = require("./routes/auth.routes");
+
 const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
@@ -27,6 +29,7 @@ devBundle.compile(app);
 
 app.use("/dist", express.static(path.join(process.cwd(), "dist")));
 app.use(roomRoutes);
+app.use(authRoutes);
 
 io.on("connection", onConnection);
 

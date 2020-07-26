@@ -9,7 +9,15 @@ export default function MessageContainer({ messages }) {
       {messages.map((message, i) => {
         return (
           <Card key={i}>
-            <Typography>{`${message.text} from ${message.userName}. ${message.date} `}</Typography>{" "}
+            {message.type == "message" && (
+              <Typography>{`${message.text} from ${message.user.name}. ${message.date} `}</Typography>
+            )}
+            {message.type == "join" && (
+              <Typography>{`${message.user.name} join to room. ${message.date} `}</Typography>
+            )}
+            {message.type == "leave" && (
+              <Typography>{`${message.user.name} leave room. ${message.date} `}</Typography>
+            )}
           </Card>
         );
       })}

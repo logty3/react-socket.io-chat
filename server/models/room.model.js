@@ -5,11 +5,7 @@ const schema = new Schema({
     type: String,
     required: true,
   },
-  users: [
-    {
-      name: { type: String, required: true },
-    },
-  ],
+  users: [{ type: Schema.ObjectId, ref: "User" }],
 });
 
 module.exports = model("Room", schema);
