@@ -3,7 +3,7 @@ import io from "socket.io-client";
 const openSocket = (roomId, token) => {
   const socket = io("http://localhost:3000", {
     query: {
-      roomId,
+      roomId: roomId + "123",
       token,
     },
   });

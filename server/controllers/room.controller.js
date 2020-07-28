@@ -14,14 +14,14 @@ const roomById = async (req, res, next, id) => {
   try {
     const room = await Room.findById(id).populate("users", "_id name");
     if (!room)
-      return res.status("400").json({
-        error: "Room  not found",
+      return res.status("404").json({
+        error: "Room not found",
       });
     req.room = room;
     next();
   } catch (error) {
-    res.status("400").json({
-      error: "Room  not found",
+    res.status("404").json({
+      error: "Room not found",
     });
   }
 };

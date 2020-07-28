@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { useHistory, Redirect, useLocation } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
 
 import { InputBase } from "@material-ui/core";
 
