@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "set NODE_ENV=production&&node ./server/server.js",
+    "start": "node ./server/server.js",
     "dev": "set NODE_ENV=development&&nodemon",
     "build": "webpack --config webpack.config.client.production.js "
   },
@@ -37,10 +37,10 @@
     "@babel/preset-react": "7.9.4",
     "babel-loader": "8.1.0",
     "nodemon": "2.0.2",
-    "webpack": "4.42.1",
+    "webpack": "^4.42.1",
     "webpack-cli": "3.3.11",
-    "webpack-dev-middleware": "3.7.2",
-    "webpack-hot-middleware": "2.25.0",
+    "webpack-dev-middleware": "^3.7.2",
+    "webpack-hot-middleware": "^2.25.0",
     "webpack-node-externals": "1.7.2"
   }
 }
