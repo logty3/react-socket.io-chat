@@ -5,10 +5,10 @@ import { Paper, Card, Typography } from "@material-ui/core";
 
 export default function MessageContainer({ messages }) {
   return (
-    <Paper>
+    <div>
       {messages.map((message, i) => {
         return (
-          <Card key={i}>
+          <div key={i}>
             {message.type == "message" && (
               <Typography>{`${message.text} from ${message.user.name}. ${message.date} `}</Typography>
             )}
@@ -18,10 +18,10 @@ export default function MessageContainer({ messages }) {
             {message.type == "leave" && (
               <Typography>{`${message.user.name} leave room. ${message.date} `}</Typography>
             )}
-          </Card>
+          </div>
         );
       })}
-    </Paper>
+    </div>
   );
 }
 

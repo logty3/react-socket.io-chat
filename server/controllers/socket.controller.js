@@ -105,6 +105,8 @@ module.exports = (io) => {
               case "CastError":
                 socket.emit("myError", "Room not found");
                 break;
+              default:
+                socket.emit("myError", "Internal server error");
             }
             socket.disconnect();
           }
@@ -128,6 +130,9 @@ module.exports = (io) => {
           case "CastError":
             socket.emit("myError", "Room not found");
             break;
+          default:
+            console.log(error);
+            socket.emit("myError", "Internal server error");
         }
         socket.disconnect();
       }

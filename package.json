@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "set NODE_ENV=development&&nodemon"
+    "start": "set NODE_ENV=production&&node ./server/server.js",
+    "dev": "set NODE_ENV=development&&nodemon",
+    "build": "webpack --config webpack.config.client.production.js "
   },
   "keywords": [],
   "author": "",

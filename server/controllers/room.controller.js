@@ -6,13 +6,18 @@ const list = async (req, res) => {
 };
 const create = async (req, res) => {
   const room = new Room(req.body);
-  const result = await room.save();
-  res.json(result);
+  try {
+    const result = await room.save();
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 const roomById = async (req, res, next, id) => {
   try {
     const room = await Room.findById(id).populate("users", "_id name");
+
     if (!room)
       return res.status("404").json({
         error: "Room not found",
@@ -20,7 +25,7 @@ const roomById = async (req, res, next, id) => {
     req.room = room;
     next();
   } catch (error) {
-    res.status("404").json({
+    return res.status("404").json({
       error: "Room not found",
     });
   }

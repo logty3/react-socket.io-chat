@@ -3,9 +3,19 @@ import io from "socket.io-client";
 const openSocket = (roomId, token) => {
   const socket = io("http://localhost:3000", {
     query: {
-      roomId: roomId + "123",
+      roomId,
       token,
     },
+  });
+
+  socket.on("myError", (message) => {
+    console.log("myError: " + message);
+  });
+  socket.on("error", (message) => {
+    console.log("error: " + message);
+  });
+  socket.on("disconnect", (message) => {
+    console.log("disconnect: " + message);
   });
 
   const sendMessage = (message) => {
@@ -53,9 +63,16 @@ const createRoom = async (name, token) => {
       },
       body: JSON.stringify({ name }),
     });
+    if (response.statusText == "Unauthorized") {
+      return Promise.resolve({
+        error: "Authorization error",
+      });
+    }
     return await response.json();
   } catch (err) {
-    console.log(err);
+    return Promise.resolve({
+      error: "Some error",
+    });
   }
 };
 
@@ -70,9 +87,17 @@ const listRooms = async (signal, token) => {
       },
       signal,
     });
+
+    if (response.statusText == "Unauthorized") {
+      return Promise.resolve({
+        error: "Authorization error",
+      });
+    }
     return await response.json();
   } catch (err) {
-    console.log(err);
+    return Promise.resolve({
+      error: "Some error",
+    });
   }
 };
 
@@ -87,9 +112,17 @@ const getRoom = async (signal, roomId, token) => {
       },
       signal,
     });
+
+    if (response.statusText == "Unauthorized") {
+      return Promise.resolve({
+        error: "Authorization error",
+      });
+    }
     return await response.json();
   } catch (err) {
-    console.log(err);
+    return Promise.resolve({
+      error: "Some error",
+    });
   }
 };
 

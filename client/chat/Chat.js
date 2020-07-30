@@ -8,29 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import { Paper } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: "20px 4px",
-    display: "flex",
-    alignItems: "center",
-    width: 400,
-  },
-  input: {
-    marginLeft: theme.spacing(1),
-    flex: 1,
-  },
-  iconButton: {
-    padding: 10,
-  },
-  divider: {
-    height: 28,
-    margin: 4,
-  },
-}));
-
 export default function Chat({ actions }) {
-  const classes = useStyles();
-
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
@@ -45,13 +23,13 @@ export default function Chat({ actions }) {
     actions.subcribeToLeave((message) =>
       setMessages((messages) => [...messages, message])
     );
-  }, []);
+  }, [actions]);
 
   return (
-    <Paper component="div" сlassName={classes.root}>
-      <MessageContainer messages={messages} />
+    <div>
       <SendMessageForm sendMessage={actions.sendMessage} />
-    </Paper>
+      <MessageContainer messages={messages} />
+    </div>
   );
 }
 

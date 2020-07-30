@@ -18,6 +18,9 @@ const Rooms = () => {
     const signal = abortController.signal;
 
     listRooms(signal, token).then((rooms) => {
+      if (rooms.error) {
+        return console.log(rooms.error);
+      }
       setRooms(rooms);
     });
 
@@ -31,8 +34,11 @@ const Rooms = () => {
   };
 
   const addRoom = () => {
-    createRoom(roomName, token).then((data) => {
-      setRooms([...rooms, data]);
+    createRoom(roomName, token).then((room) => {
+      if (room.error) {
+        return console.log(room.error);
+      }
+      setRooms([...rooms, room]);
       setRoomName("");
     });
   };
