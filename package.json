@@ -30,7 +30,7 @@
     "react-router-dom": "^5.2.0",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
-    "webpack": "^4.44.1",
+    "webpack": "^5.75.0",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0"
   },
@@ -38,9 +38,9 @@
     "@babel/core": "7.9.0",
     "@babel/preset-env": "7.9.0",
     "@babel/preset-react": "7.9.4",
-    "babel-loader": "8.1.0",
+    "babel-loader": "8.3.0",
     "nodemon": "2.0.2",
-    "webpack-cli": "3.3.11",
+    "webpack-cli": "5.0.1",
     "webpack-node-externals": "1.7.2"
   }
 }
